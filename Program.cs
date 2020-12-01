@@ -6,9 +6,7 @@ namespace MorpionConsole
     class Game
     {
         public char[,] grid = new char[,] { { ' ', ' ', ' ' }, { ' ', ' ', ' ' }, { ' ', ' ', ' ' } };
-
-        public char currentPlayer = 'o';
-
+        public char currentPlayer = 'O';
         public void displayGrid()
         {
             for (int i = 0; i < this.grid.GetLength(0); i++)
@@ -35,10 +33,7 @@ namespace MorpionConsole
                 Console.BackgroundColor = ConsoleColor.Black;
                 Console.Write("\n");
             }
-
-
         }
-
         public void changeCurrentPlayer()
         {
             if (this.currentPlayer.Equals('O'))
@@ -46,7 +41,6 @@ namespace MorpionConsole
             else
                 currentPlayer = 'O';
         }
-
         private int getPlayerValue(String text)
         {
             Console.Write(text);
@@ -54,7 +48,7 @@ namespace MorpionConsole
             try
             {
                 int i = System.Convert.ToInt32(value);
-                if (i > 2)
+                if (i > 3 || i < 0)
                 {
                     return getPlayerValue(text);
                 }
@@ -65,20 +59,19 @@ namespace MorpionConsole
                 return getPlayerValue(text);
             }
         }
-
         public int getPlayerValueX()
         {
-            return this.getPlayerValue("Entrez la ligne de la case à joué: ");
+            return this.getPlayerValue("Entrez la ligne de la case à jouer: ");
         }
 
         public int getPlayerValueY()
         {
-            return this.getPlayerValue("Entrez la colonne de la case à joué: ");
+            return this.getPlayerValue("Entrez la colonne de la case à jouer: ");
         }
 
         public bool isWin()
         {
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i <= 2; i++)
             {
                 if (grid[i, 0].Equals(grid[i, 1]) && grid[i, 2].Equals(grid[i, 1]) && !grid[i, 1].Equals(' '))
                 {
@@ -99,8 +92,6 @@ namespace MorpionConsole
             }
             return false;
         }
-
-
         public bool isNull()
         {
             for (int i = 0; i < this.grid.GetLength(0); i++)
@@ -115,7 +106,6 @@ namespace MorpionConsole
             }
             return true;
         }
-
         static void Main(string[] args)
         {
             Game mygame = new Game();
@@ -126,7 +116,15 @@ namespace MorpionConsole
                 mygame.displayGrid();
                 int x = mygame.getPlayerValueX();
                 int y = mygame.getPlayerValueY();
-                mygame.grid[x, y] = mygame.currentPlayer;
+                if (mygame.grid[x - 1, y - 1].Equals(' '))
+                {
+                    mygame.grid[x - 1, y - 1] = mygame.currentPlayer;
+                }
+                else
+                {
+                    Console.WriteLine("Vous ne pouvez pas jouer sur une case déjà remplie !");
+                    mygame.changeCurrentPlayer();
+                }
             } while (!mygame.isNull() && !mygame.isWin());
 
             mygame.displayGrid();
@@ -141,8 +139,6 @@ namespace MorpionConsole
             }
             Console.ReadKey(true);
         }
-
     }
-
 }
 
